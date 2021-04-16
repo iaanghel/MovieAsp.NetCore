@@ -1,0 +1,96 @@
+﻿@model Movie.Models.Movies
+
+@{
+    ViewData["Title"] = "Details";
+}
+<script type="text/javascript" src ="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<h1>Details</h1>
+
+<div>
+    <h4>Movie</h4>
+    <hr />
+    <dl class="row">
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Title)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Title)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.ReleaseDate)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.ReleaseDate)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Genre)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Genre)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Price)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Price)
+        </dd>
+    </dl>
+</div>
+<div>
+    <a asp-action="Edit" asp-route-id="@Model.Id">Edit</a> |
+    <a asp-action="Index">Back to List</a>
+</div>
+
+<div id="table" style="padding-top: 25px;"> </div>
+<div id="inputs">
+   
+    <div id="reviewName">
+        <label>Name</label>
+        <input id="reviewName2" class="form-control" />
+    </div>
+    <div id="reviewText">
+        <label>Review</label>
+        <textarea id="reviewText2" type="text" style="height: 200px;font-size: 14pt;" class="form-control" ></textarea>
+    </div>
+
+</div>
+<div style="padding-top: 25px;">
+    
+        <button id="button"> Add Review</button>
+    
+</div>
+
+<div id="id" hidden="hidden" >@Html.DisplayFor(modelItem => modelItem.Id)</div>
+
+<script>
+
+    
+    
+    $(document).ready(function () {
+
+        
+        var id = Number($("#id").text());
+        $("#table").load("/MovieReviews/Index", { id: id});
+        
+        $("#button").click(function () {
+            if ($("#reviewName2").val() == "") {
+                alert("The Name can't be blank!!!");
+            } else if ($("#reviewText2").val() == ""){
+                alert("The Review can't be blank!!!");
+            }
+            else
+            {
+                $.post("/MovieReviews/Create", { Name: $("#reviewName2").val(),  Review: $("#reviewText2").val(), MovieId: id }, function (data) {
+                    $("#table").load("/MovieReviews/Index", { id: id });
+                    $("#reviewName2").val("");
+                    $("#reviewText2").val("");
+                });
+            } 
+            
+        });
+    });
+    
+    
+
+</script>
